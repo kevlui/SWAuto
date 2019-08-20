@@ -29,6 +29,9 @@ def region_grabber(region):
     width = region[2] - x1
     height = region[3] - y1
 
+    im = pyautogui.screenshot(region=(x1, y1, width, height))
+    im.save("region_screenshot.png")
+
     return pyautogui.screenshot(region=(x1, y1, width, height))
 
 
