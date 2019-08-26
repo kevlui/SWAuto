@@ -60,10 +60,34 @@ def restart():
 	search('./images/battle_icon.png')
 	time.sleep(2)
 	search('./images/cairos_dungeon.png')
-
 	time.sleep(2)
+
 	search('./images/start_battle_screen.png')
-	search("./images/start.png")
+	time.sleep(2)
+
+	#Check if a refill is necessary
+	pos3 = imagesearch("./images/shop.png")
+	if(pos3[0] != -1):
+		search("./images/shop.png")
+		time.sleep(1)
+		search("./images/recharge.png")
+		time.sleep(0.5)
+
+		#check for the quiz.
+		quiz_pos = imagesearch('./images/quiz.png')
+		if(quiz_pos[0] != -1):
+			pyautogui.screenshot("quiz" + str(screenshot_quiz) + ".png")
+			screenshot_quiz = screenshot_quiz + 1
+			restart()
+
+		search("./images/yes-recharge.png")
+		search("./images/ok.png")
+		search("./images/close.png")
+		search('./images/start_battle_screen.png')
+		time.sleep(1)
+		search("./images/start.png")
+	else:
+		search("./images/start.png")
 
 	autoplay = 0
 	while(autoplay != 1):
@@ -111,15 +135,12 @@ try:
 			if(sell_pos[0] != -1):
 				rune_pos = imagesearch("./images/sixstar.png",0.9)
 				if(rune_pos[0] != -1):
-					#print("Rune is 6-starred.")
 					pyautogui.screenshot("./screenshots/6/" + str(screenshot_counter) + ".png")
 					search("./images/ok.png")
 				else:
-					#print("Rine is 5-starred.")
-					pyautogui.screenshot("./screenshots/5/" + str(screenshot_counter) + ".png")
+					#pyautogui.screenshot("./screenshots/5/" + str(screenshot_counter) + ".png")
 					search("./images/sell.png")
 					search("./images/yes-sell.png")
-					#search("./images/ok.png")
 			else:
 				search("./images/ok.png")
 			
@@ -148,15 +169,15 @@ try:
 			#check for the quiz.
 			quiz_pos = imagesearch('./images/quiz.png')
 			if(quiz_pos[0] != -1):
-				pyautogui.screenshot("quiz" + screenshot_quiz + ".png")
+				pyautogui.screenshot("quiz" + str(screenshot_quiz) + ".png")
 				screenshot_quiz = screenshot_quiz + 1
 				restart()
-
-			search("./images/yes-recharge.png")
-			search("./images/ok.png")
-			search("./images/close.png")
-			refill = refill + 1
-			print("Refill: " + str(refill))
+			else:
+				search("./images/yes-recharge.png")
+				search("./images/ok.png")
+				search("./images/close.png")
+				refill = refill + 1
+				print("Refill: " + str(refill))
 
 			if conditional == 1:
 				search("./images/replay.png")
