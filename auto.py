@@ -106,7 +106,7 @@ try:
 	screenshot_quiz = 0
 
 
-	while(counter < 5):
+	while(refill < 20):
 		conditional = -1
 		pos = [-1,-1]
 		pos2 = [-1,-1]
