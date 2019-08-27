@@ -1,5 +1,5 @@
 # SWAuto
-SWAuto is a tool that bots certain tasks for the popular game - Summoners WAr: Sky Arena.
+SWAuto is a tool that bots certain tasks for the popular game - Summoners War: Sky Arena.
 - Auto farms dungeon
 - Auto refill energy
 - Filters out drops based on rarity
