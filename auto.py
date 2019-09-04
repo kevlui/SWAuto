@@ -99,16 +99,7 @@ def restart():
 			autoplay = 1
 
 	print("Restart Command Ended.")
-
-def restart2():
-	search('./images/cairos_dungeon.png')
-	time.sleep(2)
-
-	imagesearch_loop('./images/gb10_icon.png',1)
-	time.sleep(2)
-	search('./images/start_battle_screen.png')
-	time.sleep(2)
-
+	
 
 
 
