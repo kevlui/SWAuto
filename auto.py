@@ -2,6 +2,10 @@ import time
 import pyautogui
 import sys
 from imagesearch import *
+import pytesseract
+from PIL import Image
+from pytesseract import image_to_string
+import os
 
 
 def search(image_directory):
@@ -99,7 +103,103 @@ def restart():
 			autoplay = 1
 
 	print("Restart Command Ended.")
+
+def checkSlot(image_directory , slot_num):
+	slot_pos = imagesearch(image_directory)
+	if(slot_pos[0] != -1):
+		print("Slot " + str(slot_num))
+		return slot_num
+	else:
+		return -1
+
+'''
+Detects and returns the rune slot number.
+'''
+def detectRuneSlot():
+	slot_num = -1
+	counter = 1
+
+	while(counter < 7):
+		image_directory = './images/rune/slot_' + str(counter) + '.png'
+		slot_num = checkSlot(image_directory, counter)
+		if(slot_num != -1):
+			return slot_num
+		else:
+			counter = counter + 1
+
+
+def getRuneStats():
+	# load the example image and convert it to grayscale
+	image = cv2.imread('./screenshots/123.png')
+
+	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+	gray = cv2.threshold(gray, 0, 255,cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+	#gray = cv2.GaussianBlur(gray, (5,5), 0)
+	gray = cv2.medianBlur(gray, 3)
+
+	#kernel = np.ones((5, 5), np.uint8)
+	#cv2.dilate(im, kernel, iterations = 1)
+	#cv2.erode(gray, kernel, iterations = 1)
+
 	
+	#gray = cv2.bilateralFilter(gray,9,75,75)
+	#gray = cv2.addWeighted(image, 1.5, gaussian_3, -0.5, 0, image)
+
+	#scale = 2.5
+	#width = int(gray.shape[1] * scale)
+	#height = int(gray.shape[0] * scale )
+	#dim = (width, height)
+
+	#gray = cv2.resize(gray, dim, interpolation = cv2.INTER_AREA)
+
+
+	gray = cv2.resize(gray, None, fx=3, fy=3, interpolation=cv2.INTER_LINEAR)
+
+	# write the grayscale image to disk as a temporary file so we can apply OCR to it
+	filename = "{}.png".format(os.getpid())
+	cv2.imwrite(filename, gray)
+
+	text = pytesseract.image_to_string(Image.open(filename))
+	os.remove(filename)
+	print(text)
+
+	cv2.imshow("Output", gray)
+	cv2.waitKey(0)
+
+def hasSPD():
+	pos = imagesearch('./images/rune/spd.png')
+	if(pos[0] != -1):
+		return True
+	else:
+		return False
+
+def isRuneType(rune_type):
+	if(rune_type == "swift"):
+		pos = imagesearch('./images/rune/set/swift_2.png')
+	elif(rune_type == "energy"):
+		pos = imagesearch('./images/rune/set/energy.png')
+	elif(rune_type == "blade"):
+		pos = imagesearch('./images/rune/set/blade.png')
+	elif(rune_type == "despair"):
+		pos = imagesearch('./images/rune/set/despair.png')
+	elif(rune_type == "fatal"):
+		pos = imagesearch('./images/rune/set/fatal.png')
+	else:
+		print ("Unknown Rune Type.")
+
+	if(pos[0] != -1):
+		return True
+	else:
+		return False
+
+
+
+
+
+	
+
+
+
 
 
 

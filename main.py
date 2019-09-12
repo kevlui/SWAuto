@@ -1,4 +1,7 @@
 from auto import *
+import sys
+import time 
+
 
 try:
 	counter = 1
@@ -7,7 +10,21 @@ try:
 	screenshot_quiz = 0
 
 
-	while(refill < 20):
+	argument_num = len(sys.argv)
+	if(argument_num >  1):
+		value = sys.argv[1]
+		if(value.isdigit()):
+			max_refill = int(value)
+		else:
+			print("Argument 1 is not a positive integer.")
+			sys.exit()
+	else:
+		max_refill = 10
+
+	print ("Number of refills: " + str(max_refill))
+
+
+	while(refill < max_refill):
 		conditional = -1
 		pos = [-1,-1]
 		pos2 = [-1,-1]
@@ -21,7 +38,7 @@ try:
 				conditional = 1
 			elif(pos2[0] != -1):		#If Fail is found.
 				conditional = 2
-
+				
 		#If run is successful:
 		if(conditional == 1):
 			print("Run successful: " + str(counter))
@@ -31,6 +48,8 @@ try:
 			click_image("./images/victory-paint.png", pos, "left", 0.2, offset=5)
 
 			time.sleep(1)
+
+
 			#INSERT RUNE CHECKING STUFF HERE
 			sell_pos = imagesearch("./images/sell.png")
 			if(sell_pos[0] != -1):
@@ -39,9 +58,12 @@ try:
 					pyautogui.screenshot("./screenshots/6/" + str(screenshot_counter) + ".png")
 					search("./images/ok.png")
 				else:
-					#pyautogui.screenshot("./screenshots/5/" + str(screenshot_counter) + ".png")
-					search("./images/sell.png")
-					search("./images/yes-sell.png")
+					if(isRuneType("swift")):
+						pyautogui.screenshot("./screenshots/5/" + str(screenshot_counter) + ".png")
+						search("./images/ok.png")						
+					else:
+						search("./images/sell.png")
+						search("./images/yes-sell.png")
 			else:
 				search("./images/ok.png")
 			

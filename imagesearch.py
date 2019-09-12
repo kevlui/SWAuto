@@ -144,12 +144,12 @@ the top left corner coordinates of the element if found as an array [x,y]
 '''
 
 
-def imagesearch_loop(image, timesample, precision=0.8):
+def imagesearch_loop(image, precision=0.8):
     pos = imagesearch(image, precision)
-    print("Searching for image...")
+    #print("Searching for image...")
     while pos[0] == -1:
         #print(image + " not found, waiting")
-        time.sleep(timesample)
+        #time.sleep(timesample)
         pos = imagesearch(image, precision)
     return pos
 
