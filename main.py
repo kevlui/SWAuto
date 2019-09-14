@@ -1,6 +1,7 @@
 from auto import *
 import sys
 import time 
+import argparse
 
 
 try:
@@ -10,21 +11,28 @@ try:
 	screenshot_quiz = 0
 
 
-	argument_num = len(sys.argv)
-	if(argument_num >  1):
-		value = sys.argv[1]
-		if(value.isdigit()):
-			max_refill = int(value)
-		else:
-			print("Argument 1 is not a positive integer.")
-			sys.exit()
+	# -n: number of refills 
+	# -d: dungeon type (gb,db,nb)
+
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-n', '--num', dest = "refills", default = 10 , type = int)
+	parser.add_argument('-d', '--dungeon', dest = "dungeon" , default= "gb")
+	args = parser.parse_args()
+
+	if(args.dungeon == "gb"):
+		print("GB10 Selected.")
+	elif(args.dungeon == "db"):
+		print("DB10 Selected.")
+	elif(args.dungeon == 'nb'):
+		print("NB10 Selected.")
 	else:
-		max_refill = 10
+		print("Not a dungeon option. Please input gb, db, nb for your desired dungeon type.")
 
-	print ("Number of refills: " + str(max_refill))
+	print ("Number of refills: " + str(args.refills))
+	mod_refill = args.refills + 1
 
 
-	while(refill < max_refill):
+	while(refill < mod_refill):
 		conditional = -1
 		pos = [-1,-1]
 		pos2 = [-1,-1]
@@ -59,7 +67,6 @@ try:
 					search("./images/ok.png")
 				else:
 					if(isRuneType("swift")):
-						pyautogui.screenshot("./screenshots/5/" + str(screenshot_counter) + ".png")
 						search("./images/ok.png")						
 					else:
 						search("./images/sell.png")
@@ -84,6 +91,13 @@ try:
 		time.sleep(1)
 		pos3 = imagesearch("./images/shop.png")
 		if(pos3[0] != -1):
+
+			#Check if the desired number of refill is hit.
+			refill = refill + 1	
+			if(refill == mod_refill):
+				print("End of Script.")
+				sys.exit()
+
 			search("./images/shop.png")
 			time.sleep(1)
 			search("./images/recharge.png")
@@ -96,11 +110,10 @@ try:
 				screenshot_quiz = screenshot_quiz + 1
 				restart()
 			else:
+				print("Refill: " + str(refill))
 				search("./images/yes-recharge.png")
 				search("./images/ok.png")
 				search("./images/close.png")
-				refill = refill + 1
-				print("Refill: " + str(refill))
 
 			if conditional == 1:
 				search("./images/replay.png")

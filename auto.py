@@ -65,10 +65,11 @@ def restart():
 	time.sleep(2)
 	search('./images/cairos_dungeon.png')
 	time.sleep(2)
+	search('./images/giant_tab.png')
 
-	imagesearch_loop('./images/gb10_icon.png',1)
+	search('./images/gb10_icon.png')
 	time.sleep(2)
-	search('./images/start_battle_screen.png')
+	search('./images/start_battle_screen2.png')
 	time.sleep(2)
 
 	#Check if a refill is necessary

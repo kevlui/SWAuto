@@ -6,6 +6,8 @@ import numpy as np
 from auto import *
 from matplotlib import pyplot as plt
 
+import argparse
+
 def printScreen():
 	counter = 0
 	pyautogui.screenshot('time_test.png')
@@ -18,7 +20,7 @@ def printScreen():
 	threshold = 0.5
 	loc = np.where( res >= threshold)
 	for pt in zip(*loc[::-1]):
-	    cv.rectangle(img_rgb, pt, (pt[0] + w + w, pt[1] + h), (0,0,255), 2)
+		cv.rectangle(img_rgb, pt, (pt[0] + w + w, pt[1] + h), (0,0,255), 2)
 	cv.imwrite('result.png',img_rgb)
 
 def search_loop(image_directory):
@@ -30,21 +32,10 @@ def search_loop(image_directory):
 			search_bool = 1
 
 try:
-	#printScreen()
-	#getRuneStats()
-	if(isRuneType("swift")):
-		if(hasSPD()):
-			print ("Swift Rune with SPD Sub")
-	elif(isRuneType("energy")):
-		print("Energy Rune.")
-	elif(isRuneType("fatal")):
-		print("Fatal Rune.")
-	elif(isRuneType("despair")):
-		print("despair Rune.")
-	elif(isRuneType("blade")):
-		print("blade Rune.")
-	else:
-		print ("Rune sold.")
+
+	
+
+
 except KeyboardInterrupt:	
 	print("Keyboard Interrupt")
 
