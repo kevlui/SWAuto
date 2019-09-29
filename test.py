@@ -23,15 +23,20 @@ def printScreen():
 		cv.rectangle(img_rgb, pt, (pt[0] + w + w, pt[1] + h), (0,0,255), 2)
 	cv.imwrite('result.png',img_rgb)
 
-def search_loop(image_directory):
-	search_bool = 0
-	while(search_bool != 1):
-		search_pos = imagesearch(image_directory)
-		if(search_pos[0] != -1):
-			search(image_directory)
-			search_bool = 1
+def test():
+	search('./images/battle_icon.png')
+	time.sleep(2)
+	search('./images/cairos_dungeon.png')
+	time.sleep(2)
+	search('./images/giant_tab.png')
+
+	search('./images/gb10_icon.png')
+	time.sleep(3)
+	search('./images/start_battle_screen.png')
+	time.sleep(2)
 
 try:
+	restart()
 
 	
 

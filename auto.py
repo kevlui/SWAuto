@@ -24,6 +24,7 @@ def search_loop(image_directory):
 			search(image_directory)
 			search_bool = 1
 
+
 def restart():
 	#Restart the application
 	search('./images/sw_tab.png')
@@ -68,8 +69,8 @@ def restart():
 	search('./images/giant_tab.png')
 
 	search('./images/gb10_icon.png')
-	time.sleep(2)
-	search('./images/start_battle_screen2.png')
+	time.sleep(3)
+	search('./images/start_battle_screen.png')
 	time.sleep(2)
 
 	#Check if a refill is necessary

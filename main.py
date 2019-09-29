@@ -9,6 +9,7 @@ try:
 	refill = 0
 	screenshot_counter = 0
 	screenshot_quiz = 0
+	mode = 0
 
 
 	# -n: number of refills 
@@ -25,6 +26,14 @@ try:
 		print("DB10 Selected.")
 	elif(args.dungeon == 'nb'):
 		print("NB10 Selected.")
+	elif(args.dungeon == 'toa'):
+		print("Toa Selected.")
+	elif(args.dungeon == 'erift'):
+		print("Elemental Rift Detected.")
+		mode = 2
+	elif(args.dungeon == 'drift'):
+		print("Elemental Rift Detected.")
+		mode = 3
 	else:
 		print("Not a dungeon option. Please input gb, db, nb for your desired dungeon type.")
 
@@ -39,7 +48,11 @@ try:
 
 		#Search for successful or failed run.
 		while(conditional == -1):
-			pos = imagesearch("./images/victory-paint.png")
+			if(mode == 2):
+				pos = imagesearch("./images/result.png")
+			else:
+				pos = imagesearch("./images/victory-paint.png")
+
 			pos2 = imagesearch("./images/no.png")
 				
 			if(pos[0] != -1):			#If Victory img is found
@@ -51,28 +64,36 @@ try:
 		if(conditional == 1):
 			print("Run successful: " + str(counter))
 			time.sleep(3)
-			click_image("./images/victory-paint.png", pos, "left", 0.2, offset=5)
-			time.sleep(0.5)
-			click_image("./images/victory-paint.png", pos, "left", 0.2, offset=5)
 
-			time.sleep(1)
-
-
-			#INSERT RUNE CHECKING STUFF HERE
-			sell_pos = imagesearch("./images/sell.png")
-			if(sell_pos[0] != -1):
-				rune_pos = imagesearch("./images/sixstar.png",0.9)
-				if(rune_pos[0] != -1):
-					pyautogui.screenshot("./screenshots/6/" + str(screenshot_counter) + ".png")
-					search("./images/ok.png")
-				else:
-					if(isRuneType("swift")):
-						search("./images/ok.png")						
-					else:
-						search("./images/sell.png")
-						search("./images/yes-sell.png")
+			if(mode == 2):
+				time.sleep(3)
+				click_image("./images/result.png", pos, "left", 0.2, offset=5)
+				time.sleep(0.5)
+				click_image("./images/result.png", pos, "left", 0.2, offset=5)
+				time.sleep(2)
+				search("./images/ok-erift.png")
 			else:
-				search("./images/ok.png")
+				click_image("./images/victory-paint.png", pos, "left", 0.2, offset=5)
+				time.sleep(0.5)
+				click_image("./images/victory-paint.png", pos, "left", 0.2, offset=5)
+				time.sleep(1)
+
+
+				#INSERT RUNE CHECKING STUFF HERE
+				sell_pos = imagesearch("./images/sell.png")
+				if(sell_pos[0] != -1):
+					rune_pos = imagesearch("./images/sixstar.png",0.9)
+					if(rune_pos[0] != -1):
+						pyautogui.screenshot("./screenshots/6/" + str(screenshot_counter) + ".png")
+						search("./images/ok.png")
+					else:
+						if(isRuneType("swift")):
+							search("./images/ok.png")						
+						else:
+							search("./images/sell.png")
+							search("./images/yes-sell.png")
+				else:
+					search("./images/ok.png")
 			
 			search("./images/replay.png")
 			counter = counter + 1
@@ -124,6 +145,9 @@ try:
 		#Need to click start if the run failed.
 		if conditional == 2:
 			search("./images/start.png")
+
+			if(mode == 3):
+				search("./images/start_drift.png")
 
 
 		time.sleep(1)
