@@ -133,9 +133,11 @@ try:
 			else:
 				print("Refill: " + str(refill))
 				search("./images/yes-recharge.png")
+				time.sleep(1)
 				search("./images/ok.png")
+				time.sleep(1)
 				search("./images/close.png")
-
+				time.sleep(1)
 			if conditional == 1:
 				search("./images/replay.png")
 

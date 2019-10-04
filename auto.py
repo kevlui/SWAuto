@@ -24,24 +24,7 @@ def search_loop(image_directory):
 			search(image_directory)
 			search_bool = 1
 
-
-def restart():
-	#Restart the application
-	search('./images/sw_tab.png')
-	time.sleep(0.5)
-	search('./images/sw_close.png')
-	search('./images/sw_icon.png')
-
-	#Check for "Touch to start"
-	restart = -1
-	while(restart == -1):
-		start_pos = imagesearch('./images/touch_to_start.png')
-		if(start_pos[0] != -1):
-			restart = 0
-
-	time.sleep(3)
-
-	#Check for adds and close them.
+def closeAds():
 	ad = 0
 	while(ad < 5):
 		start_ad_pos = imagesearch('./images/start_ad_close.png')
@@ -51,8 +34,36 @@ def restart():
 		else:
 			ad = 10
 
-	search('./images/touch_to_start.png')
+def clickB10():
+	button = imagesearch('./images/b10.png')
+	end = imagesearch('./images/shake_icon.png')
+	result = imagesearcharea('./images/start_battle_screen2.png', button[0] , button [1] , end[0], end[1])
+	final = (button[0] + result[0], button[1] + result[1])
+	click_image('./images/start_battle_screen2.png',final, "left", 0.2, offset=5)
+	time.sleep(2)
 
+
+def restart():
+	#Restart the application
+	search('./images/sw_tab.png')
+	time.sleep(0.5)
+	search('./images/sw_close.png')
+	search('./images/sw_icon.png')
+
+	time.sleep(10)
+	closeAds()
+
+	#Check for "Touch to start"
+	restart = -1
+	while(restart == -1):
+		start_pos = imagesearch('./images/touch_to_start.png')
+		if(start_pos[0] != -1):
+			restart = 0
+
+	time.sleep(3)
+	closeAds()
+
+	search('./images/touch_to_start.png')
 	time.sleep(2)
 	search('./images/sw_intro_skip.png')
 
@@ -66,12 +77,13 @@ def restart():
 	time.sleep(2)
 	search('./images/cairos_dungeon.png')
 	time.sleep(2)
-	search('./images/giant_tab.png')
+	#search('./images/giant_tab.png')
 
-	search('./images/gb10_icon.png')
-	time.sleep(3)
-	search('./images/start_battle_screen.png')
-	time.sleep(2)
+	#search('./images/gb10_icon.png')
+	#time.sleep(3)
+	#search('./images/start_battle_screen.png')
+
+	clickB10()
 
 	#Check if a refill is necessary
 	pos3 = imagesearch("./images/shop.png")
@@ -89,10 +101,10 @@ def restart():
 			restart()
 
 		search("./images/yes-recharge.png")
+		time.sleep(1)
 		search("./images/ok.png")
 		search("./images/close.png")
-		search('./images/start_battle_screen.png')
-		time.sleep(1)
+		clickB10()
 		search("./images/start.png")
 	else:
 		search("./images/start.png")
