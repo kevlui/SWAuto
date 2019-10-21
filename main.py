@@ -88,10 +88,22 @@ try:
 						search("./images/ok.png")
 					else:
 						if(isRuneType("swift")):
-							search("./images/ok.png")						
+							if(checkSlot("./images/rune/slot_2.png",2) == 2):
+								pyautogui.screenshot("./screenshots/discard/" + str(screenshot_counter) + ".png")
+								#search("./images/sell.png")
+								#search("./images/yes-sell.png")
+								search("./images/ok.png")
+							else:
+								if(hasSPD()):
+									pyautogui.screenshot("./screenshots/keep/" + str(screenshot_counter) + ".png")
+								else:
+									pyautogui.screenshot("./screenshots/discard/" + str(screenshot_counter) + ".png")
+								search("./images/ok.png")						
 						else:
-							search("./images/sell.png")
-							search("./images/yes-sell.png")
+							pyautogui.screenshot("./screenshots/discard/" + str(screenshot_counter) + ".png")
+							#search("./images/sell.png")
+							#search("./images/yes-sell.png")
+							search("./images/ok.png")
 				else:
 					search("./images/ok.png")
 			
@@ -138,6 +150,7 @@ try:
 				time.sleep(1)
 				search("./images/close.png")
 				time.sleep(1)
+				
 			if conditional == 1:
 				search("./images/replay.png")
 

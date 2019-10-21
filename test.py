@@ -27,30 +27,12 @@ def printScreen():
 
 
 def test():
-	#Take current screenshot.
-	pyautogui.screenshot('select_gb10.png')
-	img_rgb = cv.imread("select_gb10.png")
-
-	#Find the start and end of the region of interest
-	button = imagesearch('./images/b10.png')
-	end = imagesearch('./images/shake_icon.png')
-	print(button)
-	print(end)
-
-	result = imagesearcharea('./images/start_battle_screen2.png', button[0] , button [1] , end[0], end[1])
-	print(result)
-
-
-	final = (button[0] + result[0], button[1] + result[1])
-
-	cv.rectangle(img_rgb,final,end,(0,0,255), 2)
-	cv.imwrite('result.png',img_rgb)
-
-	click_image('./images/start_battle_screen2.png',final, "left", 0.2, offset=5)
-
+	rune_pos = imagesearch("./images/sixstar_2.png",0.8)
+	print(rune_pos)
+					
 try:
-	restart()
-
+	#restart()
+	test()
 	
 
 

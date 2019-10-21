@@ -50,20 +50,24 @@ def restart():
 	search('./images/sw_close.png')
 	search('./images/sw_icon.png')
 
+	clickLocation = imagesearch('./images/sw_icon.png')
+
 	time.sleep(10)
 	closeAds()
+
+	#click_image('./images/sw_icon.png', clickLocation , "left", 0.2, offset=5)
 
 	#Check for "Touch to start"
 	restart = -1
 	while(restart == -1):
-		start_pos = imagesearch('./images/touch_to_start.png')
+		start_pos = imagesearch('./images/title_screen.png')
 		if(start_pos[0] != -1):
 			restart = 0
 
-	time.sleep(3)
+	time.sleep(30)
 	closeAds()
 
-	search('./images/touch_to_start.png')
+	search('./images/title_screen.png')
 	time.sleep(2)
 	search('./images/sw_intro_skip.png')
 
@@ -74,7 +78,7 @@ def restart():
 	time.sleep(5)
 
 	search('./images/battle_icon.png')
-	time.sleep(2)
+	time.sleep(10)
 	search('./images/cairos_dungeon.png')
 	time.sleep(2)
 	#search('./images/giant_tab.png')
@@ -181,10 +185,21 @@ def getRuneStats():
 	cv2.waitKey(0)
 
 def hasSPD():
-	pos = imagesearch('./images/rune/spd.png')
-	if(pos[0] != -1):
+	start = imagesearch('./images/rune/set/swift_2.png')
+	end = imagesearch('./images/ok.png')
+
+	#print (start)
+	#print (end)
+	
+	aoi = imagesearcharea('./images/rune/spd.png', start[0]-220, start[1], end[0], end[1]-75)
+
+	if(aoi[0] != -1):
+		#im = pyautogui.screenshot(region=(aoi[0],aoi[1],end[0],end[1]))
+		#im.save("sublocation.png")
+		#print(aoi)
 		return True
 	else:
+		#print("SPD sub not found.")
 		return False
 
 def isRuneType(rune_type):
@@ -205,6 +220,7 @@ def isRuneType(rune_type):
 		return True
 	else:
 		return False
+
 
 
 
