@@ -3,6 +3,7 @@ from imagesearch import *
 import pyautogui
 import cv2 as cv
 import numpy as np
+import random
 from auto import *
 from matplotlib import pyplot as plt
 
@@ -27,12 +28,33 @@ def printScreen():
 
 
 def test():
-	rune_pos = imagesearch("./images/sixstar_2.png",0.8)
-	print(rune_pos)
-					
+	if(search("./images/replay.png") == -1):
+				search("./images/halloween_event.png")
+				search("./images/ok.png")
+
+
+def test_click():
+	time.sleep(3)
+	pyautogui.moveTo(500,400, 2, pyautogui.easeInOutQuad)
+	time.sleep(.5)
+	pyautogui.moveTo(1300,400, 2, pyautogui.easeInOutQuad)
+	time.sleep(.5)
+
+
+def test_click_loop():
+	 x = random.randint(70,120)
+
+	 while x > 0:
+	 	test_click()
+	 	x = random.randint(70,120)
+	 	print(x)
+	 	time.sleep(x)
+			
 try:
-	#restart()
-	test()
+	restart(4)
+	#autoplay_pos = search("./images/autoplay_button_nb10.png")
+	#test_click_loop()
+
 	
 
 

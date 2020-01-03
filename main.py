@@ -22,10 +22,13 @@ try:
 
 	if(args.dungeon == "gb"):
 		print("GB10 Selected.")
+		mode = 1
 	elif(args.dungeon == "db"):
 		print("DB10 Selected.")
+		mode = 5
 	elif(args.dungeon == 'nb'):
 		print("NB10 Selected.")
+		mode = 4
 	elif(args.dungeon == 'toa'):
 		print("Toa Selected.")
 	elif(args.dungeon == 'erift'):
@@ -39,6 +42,8 @@ try:
 
 	print ("Number of refills: " + str(args.refills))
 	mod_refill = args.refills + 1
+
+	print("NIDALEE PATCH ACTIVE.")
 
 
 	while(refill < mod_refill):
@@ -83,31 +88,53 @@ try:
 				sell_pos = imagesearch("./images/sell.png")
 				if(sell_pos[0] != -1):
 					rune_pos = imagesearch("./images/sixstar.png",0.9)
+					rune_pos2 = imagesearch("./images/sixstar_2.png",0.9)
+					rune_boolean = -1
+
+					#if(rune_pos[0] != -1):
+					#	pyautogui.screenshot("./screenshots/6/" + str(screenshot_counter) + ".png")
+					#	search("./images/ok.png")
+
 					if(rune_pos[0] != -1):
-						pyautogui.screenshot("./screenshots/6/" + str(screenshot_counter) + ".png")
+						rune_boolean = 1
+					elif(rune_pos2[0] != -1):
+						rune_boolean = 2
+
+					#6-STARS
+					currentTime = datetime.now()
+					ct_string = currentTime.strftime("%d-%m-%H-%M-%S")
+
+					if((rune_boolean == 1) or (rune_boolean == 2)):
+						pyautogui.screenshot("./screenshots/keep/" + ct_string + ".png")
 						search("./images/ok.png")
 					else:
 						if(isRuneType("swift")):
 							if(checkSlot("./images/rune/slot_2.png",2) == 2):
-								pyautogui.screenshot("./screenshots/discard/" + str(screenshot_counter) + ".png")
-								#search("./images/sell.png")
-								#search("./images/yes-sell.png")
-								search("./images/ok.png")
+								pyautogui.screenshot("./screenshots/discard/" + ct_string + ".png")
+								search("./images/sell.png")
+								search("./images/yes-sell.png")
+								#search("./images/ok.png")
 							else:
 								if(hasSPD()):
-									pyautogui.screenshot("./screenshots/keep/" + str(screenshot_counter) + ".png")
+									pyautogui.screenshot("./screenshots/keep/" + ct_string + ".png")
 								else:
-									pyautogui.screenshot("./screenshots/discard/" + str(screenshot_counter) + ".png")
+									pyautogui.screenshot("./screenshots/discard/" + ct_string + ".png")
 								search("./images/ok.png")						
 						else:
-							pyautogui.screenshot("./screenshots/discard/" + str(screenshot_counter) + ".png")
-							#search("./images/sell.png")
-							#search("./images/yes-sell.png")
-							search("./images/ok.png")
+							pyautogui.screenshot("./screenshots/discard/" + ct_string + ".png")
+							search("./images/sell.png")
+							search("./images/yes-sell.png")
+							#search("./images/ok.png")
 				else:
 					search("./images/ok.png")
+
+			#EVENT-ONLY
 			
-			search("./images/replay.png")
+			if(search("./images/replay.png") == -1):
+				#search("./images/halloween_event.png")
+				search("./images/ok.png")
+				search("./images/replay.png")
+
 			counter = counter + 1
 			screenshot_counter = screenshot_counter + 1
 		#IF run fails:
@@ -141,7 +168,7 @@ try:
 			if(quiz_pos[0] != -1):
 				pyautogui.screenshot("quiz" + str(screenshot_quiz) + ".png")
 				screenshot_quiz = screenshot_quiz + 1
-				restart()
+				restart(mode)
 			else:
 				print("Refill: " + str(refill))
 				search("./images/yes-recharge.png")

@@ -5,7 +5,9 @@ from imagesearch import *
 import pytesseract
 from PIL import Image
 from pytesseract import image_to_string
+from datetime import datetime
 import os
+
 
 
 def search(image_directory):
@@ -14,6 +16,7 @@ def search(image_directory):
 	if button[0] != -1:
 		click_image(image_directory, button, "left", 0.2, offset=5)
 	else:
+		return -1
 		print(image_directory + "is not found")
 
 def search_loop(image_directory):
@@ -43,7 +46,7 @@ def clickB10():
 	time.sleep(2)
 
 
-def restart():
+def restart(mode):
 	#Restart the application
 	search('./images/sw_tab.png')
 	time.sleep(0.5)
@@ -78,15 +81,20 @@ def restart():
 	time.sleep(5)
 
 	search('./images/battle_icon.png')
-	time.sleep(10)
+	time.sleep(5)
+
+	#dimensionalRiftBypass()
 	search('./images/cairos_dungeon.png')
 	time.sleep(2)
-	#search('./images/giant_tab.png')
 
-	#search('./images/gb10_icon.png')
-	#time.sleep(3)
-	#search('./images/start_battle_screen.png')
+	if(mode == 1):
+		search('./images/giant_tab.png')
+	elif(mode == 4):
+		search("./images/necropolis_tab.png")
+	elif(mode == 5):
+		search("./images/dragon_tab.png")
 
+	time.sleep(1)
 	clickB10()
 
 	#Check if a refill is necessary
@@ -102,7 +110,7 @@ def restart():
 		if(quiz_pos[0] != -1):
 			pyautogui.screenshot("quiz" + str(screenshot_quiz) + ".png")
 			screenshot_quiz = screenshot_quiz + 1
-			restart()
+			restart(mode)
 
 		search("./images/yes-recharge.png")
 		time.sleep(1)
@@ -113,12 +121,14 @@ def restart():
 	else:
 		search("./images/start.png")
 
-	autoplay = 0
-	while(autoplay != 1):
-		autoplay_pos = imagesearch("./images/autoplay_button_gb10.png")
-		if(autoplay_pos[0] != -1):
-			search("./images/autoplay_button_gb10.png")
-			autoplay = 1
+	time.sleep(10)
+
+	if(mode == 1):
+		search("./images/autoplay_button_gb10.png")
+	elif(mode == 4):
+		search("./images/autoplay_button_nb10.png")
+	elif(mode == 5):
+		search("./images/autoplay_button_db10.png")
 
 	print("Restart Command Ended.")
 
@@ -220,6 +230,21 @@ def isRuneType(rune_type):
 		return True
 	else:
 		return False
+
+
+def dimensionalRiftBypass():
+	ok_pos = imagesearch('./images/ok.png')
+	if(ok_pos != -1):
+		search('./images/ok.png')
+		search('./images/reverse.png')
+		search('./images/battle_icon.png')
+		time.sleep(10)
+		search('./images/cairos_dungeon.png')
+		time.sleep(2)
+
+
+
+
 
 
 
