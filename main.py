@@ -2,7 +2,9 @@ from auto import *
 import sys
 import time 
 import argparse
+from pympler.tracker import SummaryTracker
 
+tracker = SummaryTracker()
 
 try:
 	counter = 1
@@ -64,7 +66,7 @@ try:
 				conditional = 1
 			elif(pos2[0] != -1):		#If Fail is found.
 				conditional = 2
-				
+
 		#If run is successful:
 		if(conditional == 1):
 			print("Run successful: " + str(counter))
@@ -173,7 +175,7 @@ try:
 				print("Refill: " + str(refill))
 				search("./images/yes-recharge.png")
 				time.sleep(1)
-				search("./images/ok.png")
+				search("./images/ok-2.png")
 				time.sleep(1)
 				search("./images/close.png")
 				time.sleep(1)
@@ -195,5 +197,6 @@ try:
 		time.sleep(1)
 	counter = counter + 1
 
-except KeyboardInterrupt:	
+except KeyboardInterrupt:
+	tracker.print_diff()
 	print("Keyboard Interrupt")

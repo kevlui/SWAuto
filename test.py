@@ -51,9 +51,10 @@ def test_click_loop():
 	 	time.sleep(x)
 			
 try:
-	restart(4)
+	#restart(4)
 	#autoplay_pos = search("./images/autoplay_button_nb10.png")
 	#test_click_loop()
+	search("./images/ok-2.png")
 
 	
 
