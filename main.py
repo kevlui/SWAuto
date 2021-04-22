@@ -2,9 +2,7 @@ from auto import *
 import sys
 import time 
 import argparse
-from pympler.tracker import SummaryTracker
-
-tracker = SummaryTracker()
+from imagesearch import *
 
 try:
 	counter = 1
@@ -18,7 +16,7 @@ try:
 	# -d: dungeon type (gb,db,nb)
 
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-n', '--num', dest = "refills", default = 10 , type = int)
+	parser.add_argument('-n', '--num', dest = "refills", default = 0 , type = int)
 	parser.add_argument('-d', '--dungeon', dest = "dungeon" , default= "gb")
 	args = parser.parse_args()
 
@@ -45,7 +43,7 @@ try:
 	print ("Number of refills: " + str(args.refills))
 	mod_refill = args.refills + 1
 
-	print("NIDALEE PATCH ACTIVE.")
+	print("7th Anniversary Patch")
 
 
 	while(refill < mod_refill):
@@ -107,6 +105,7 @@ try:
 					ct_string = currentTime.strftime("%d-%m-%H-%M-%S")
 
 					if((rune_boolean == 1) or (rune_boolean == 2)):
+						print("keeping rune.")
 						pyautogui.screenshot("./screenshots/keep/" + ct_string + ".png")
 						search("./images/ok.png")
 					else:
@@ -123,6 +122,7 @@ try:
 									pyautogui.screenshot("./screenshots/discard/" + ct_string + ".png")
 								search("./images/ok.png")						
 						else:
+							print("selling rune.")
 							pyautogui.screenshot("./screenshots/discard/" + ct_string + ".png")
 							search("./images/sell.png")
 							search("./images/yes-sell.png")
@@ -130,12 +130,13 @@ try:
 				else:
 					search("./images/ok.png")
 
-			#EVENT-ONLY
-			
+			#EVENT-ONLY DROPS CHECKING.
+			print("Checking Event Drop" )
+
 			if(search("./images/replay.png") == -1):
-				#search("./images/halloween_event.png")
 				search("./images/ok.png")
 				search("./images/replay.png")
+
 
 			counter = counter + 1
 			screenshot_counter = screenshot_counter + 1
@@ -151,6 +152,7 @@ try:
 
 		#Check if refill is neccessary
 		time.sleep(1)
+		print("checking refill")
 		pos3 = imagesearch("./images/shop.png")
 		if(pos3[0] != -1):
 
@@ -196,7 +198,7 @@ try:
 
 		time.sleep(1)
 	counter = counter + 1
+	print("next loop.")
 
 except KeyboardInterrupt:
-	tracker.print_diff()
 	print("Keyboard Interrupt")

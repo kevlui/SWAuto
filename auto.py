@@ -2,9 +2,6 @@ import time
 import pyautogui
 import sys
 from imagesearch import *
-import pytesseract
-from PIL import Image
-from pytesseract import image_to_string
 from datetime import datetime
 import os
 
@@ -15,6 +12,7 @@ def search(image_directory):
 	button = imagesearch(image_directory)
 	if button[0] != -1:
 		click_image(image_directory, button, "left", 0.2, offset=5)
+		#print("clicking" + str(image_directory))
 	else:
 		return -1
 		print(image_directory + "is not found")
