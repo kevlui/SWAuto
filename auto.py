@@ -4,18 +4,20 @@ import sys
 from imagesearch import *
 from datetime import datetime
 import os
+import random
 
 
 
 def search(image_directory):
-	time.sleep(1)
+	delay = random.randint(3,5)
 	button = imagesearch(image_directory)
 	if button[0] != -1:
+		#print("Delay is: " + str(delay) + " seconds")
 		click_image(image_directory, button, "left", 0.2, offset=5)
-		#print("clicking" + str(image_directory))
+		time.sleep(delay)
 	else:
+		print(image_directory + " is not found")
 		return -1
-		print(image_directory + "is not found")
 
 def search_loop(image_directory):
 	search_bool = 0
@@ -243,7 +245,32 @@ def dimensionalRiftBypass():
 
 
 
+def autoBattle():
+	search('./images/auto battle/replay.png')
+	print("auto.")
+	search('./images/auto battle/repeat_battle.png')
 
+
+	check = search('./images/auto battle/shop.png')
+
+
+	#If the shop button exists:
+	if(check != -1):
+		search('./images/auto battle/recharge_energy_190.png')
+
+		#INSERT QUIZ BYPASS HERE.
+		#quiz_check = search('./images/auto battle/quiz.png')
+
+		search('./images/auto battle/yes.png')
+		search('./images/auto battle/ok.png')
+		search('./images/auto battle/close.png')
+		search('./images/auto battle/repeat_battle.png')
+
+
+def quizSolver():
+	search('./images/sw_tab.png')
+	search('./images/sw_close.png')
+	print("quiz solver to be added.")
 
 
 

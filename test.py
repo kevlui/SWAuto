@@ -11,11 +11,16 @@ import argparse
 
 
 try:
-	sell_pos = imagesearch("./images/sell.png")
-	if(sell_pos[0] != -1):
-		print("found.")
-	else:
-		print("not found.")
+
+	auto_battle_active = 1
+	print("Testing Auto Battler Refresher")
+
+	while(auto_battle_active == 1):
+		#check for replay button.
+		change = imagesearch('./images/auto battle/replay.png')
+		
+		if(change[0] != -1):
+			autoBattle()
 
 	
 
