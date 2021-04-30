@@ -2,25 +2,20 @@ import time
 from imagesearch import *
 import pyautogui
 import cv2 as cv
-#import numpy as np
 import random
 from auto import *
-#from matplotlib import pyplot as plt
+
 
 import argparse
 
 
+def closeTest():
+	search('./images/sw_icon.png')
+
 try:
-
-	auto_battle_active = 1
 	print("Testing Auto Battler Refresher")
+	autoBattle(0,10)
 
-	while(auto_battle_active == 1):
-		#check for replay button.
-		change = imagesearch('./images/auto battle/replay.png')
-		
-		if(change[0] != -1):
-			autoBattle()
 
 	
 

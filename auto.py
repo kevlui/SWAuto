@@ -9,7 +9,7 @@ import random
 
 
 def search(image_directory):
-	delay = random.randint(3,5)
+	delay = random.randint(3,4)
 	button = imagesearch(image_directory)
 	if button[0] != -1:
 		#print("Delay is: " + str(delay) + " seconds")
@@ -245,27 +245,43 @@ def dimensionalRiftBypass():
 
 
 
-def autoBattle():
-	search('./images/auto battle/replay.png')
-	print("auto.")
-	search('./images/auto battle/repeat_battle.png')
+def autoBattle(refill_counter,max_counter):
+	
+	auto_battle_active = 1
 
+	currentTime = datetime.now()
+	ct_string = currentTime.strftime("%d-%m-%H-%M-%S")
 
-	check = search('./images/auto battle/shop.png')
+	while(auto_battle_active == 1):
+		#check for replay button.
+		change = imagesearch('./images/auto battle/replay.png')
 
+		if(change[0] != -1):
+			search('./images/auto battle/replay.png')
+			search('./images/auto battle/repeat_battle.png')
+			check = search('./images/auto battle/shop.png')
 
-	#If the shop button exists:
-	if(check != -1):
-		search('./images/auto battle/recharge_energy_190.png')
+			if(max_counter > refill_counter):
+				if(check != -1):
+					search('./images/auto battle/recharge_energy_190.png')
 
-		#INSERT QUIZ BYPASS HERE.
-		#quiz_check = search('./images/auto battle/quiz.png')
+					#INSERT QUIZ BYPASS HERE.
+					quiz_check = search('./images/auto battle/quiz.png')
+					if(quiz_check != -1):
+						pyautogui.screenshot("./screenshots/quiz data/" + ct_string + ".png")
+						print("Quiz Detected.")
+						sys.ext()
 
-		search('./images/auto battle/yes.png')
-		search('./images/auto battle/ok.png')
-		search('./images/auto battle/close.png')
-		search('./images/auto battle/repeat_battle.png')
-
+					search('./images/auto battle/yes.png')
+					search('./images/auto battle/ok.png')
+					search('./images/auto battle/close.png')
+					search('./images/auto battle/repeat_battle.png')
+					refill_counter = refill_counter + 1
+					print("Current Refill: " + str(refill_counter))
+			else:
+				auto_battle_active = 2
+				print("Desired Refill has been reached. Program Ended.")
+				sys.ext()
 
 def quizSolver():
 	search('./images/sw_tab.png')
