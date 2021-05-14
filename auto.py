@@ -5,18 +5,20 @@ from imagesearch import *
 from datetime import datetime
 import os
 import random
+import logging 
 
 
 
 def search(image_directory):
-	delay = random.randint(3,4)
+	delay = random.randint(4,5)
 	button = imagesearch(image_directory)
 	if button[0] != -1:
 		#print("Delay is: " + str(delay) + " seconds")
+		logging.info("Clicking " +  image_directory)
 		click_image(image_directory, button, "left", 0.2, offset=5)
 		time.sleep(delay)
 	else:
-		print(image_directory + " is not found")
+		logging.info(image_directory + " is not found")
 		return -1
 
 def search_loop(image_directory):
@@ -242,7 +244,15 @@ def dimensionalRiftBypass():
 		search('./images/cairos_dungeon.png')
 		time.sleep(2)
 
-
+def checkLost(counter):
+	button = imagesearch('./images/auto battle/lost_battle.png')
+	if button[0] != -1:
+		counter = counter + 1
+		print("Lost Battle Detected. Current Fails: " + str(counter))
+		logging.info("Lost Battle Detected. Current Fails: " + str(counter))
+		return counter
+	else:
+		return counter
 
 
 def autoBattle(refill_counter,max_counter):
@@ -252,11 +262,14 @@ def autoBattle(refill_counter,max_counter):
 	currentTime = datetime.now()
 	ct_string = currentTime.strftime("%d-%m-%H-%M-%S")
 
+	num_lost = 0
+
 	while(auto_battle_active == 1):
 		#check for replay button.
 		change = imagesearch('./images/auto battle/replay.png')
 
 		if(change[0] != -1):
+			num_lost = checkLost(num_lost)
 			search('./images/auto battle/replay.png')
 			search('./images/auto battle/repeat_battle.png')
 			check = search('./images/auto battle/shop.png')
@@ -269,7 +282,7 @@ def autoBattle(refill_counter,max_counter):
 					quiz_check = search('./images/auto battle/quiz.png')
 					if(quiz_check != -1):
 						pyautogui.screenshot("./screenshots/quiz data/" + ct_string + ".png")
-						print("Quiz Detected.")
+						logging.info("Quiz Detected.")
 						sys.ext()
 
 					search('./images/auto battle/yes.png')

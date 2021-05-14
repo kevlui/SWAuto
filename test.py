@@ -1,20 +1,28 @@
 import time 
-from imagesearch import *
 import pyautogui
 import cv2 as cv
 import random
 from auto import *
+from imagesearch import *
+import logging 
 
 
 import argparse
 
 
-def closeTest():
-	search('./images/sw_icon.png')
+
+
 
 try:
-	print("Testing Auto Battler Refresher")
-	autoBattle(0,10)
+	logging.basicConfig(filename="std.log", format='%(asctime)s %(message)s', filemode='w') 
+	logger=logging.getLogger() 
+	logger.setLevel(logging.DEBUG) 
+
+	print("Auto Battler Refresher Start")
+	logging.debug("Testing Debug method.")
+	autoBattle(0,3)
+	#search('./images/auto battle/repeat_battle.png')
+	
 
 
 	
