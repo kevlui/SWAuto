@@ -98,6 +98,13 @@ def click_image(image, pos, action, timestamp, offset=5):
     pyautogui.click(button=action)
 
 
+
+def click(pos, action, timestamp, offset=5):
+    pyautogui.moveTo(pos[0] + r( 0 , offset), pos[1] + r( 0 , offset),
+                     timestamp)
+    pyautogui.click(button=action)
+
+
 '''
 Searchs for an image on the screen
 

@@ -15,6 +15,10 @@ try:
 	# -n: number of refills 
 	# -d: dungeon type (gb,db,nb)
 
+	logging.basicConfig(filename="std.log", format='%(asctime)s %(message)s', filemode='w') 
+	logger=logging.getLogger() 
+	logger.setLevel(logging.DEBUG) 
+
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-n', '--num', dest = "refills", default = 0 , type = int)
 	parser.add_argument('-d', '--dungeon', dest = "dungeon" , default= "gb")
@@ -31,6 +35,7 @@ try:
 		mode = 4
 	elif(args.dungeon == 'toa'):
 		print("Toa Selected.")
+		mode = 6
 	elif(args.dungeon == 'erift'):
 		print("Elemental Rift Detected.")
 		mode = 2
@@ -55,6 +60,7 @@ try:
 		while(conditional == -1):
 			if(mode == 2):
 				pos = imagesearch("./images/result.png")
+				print("Victory Detected.")
 			else:
 				pos = imagesearch("./images/victory-paint.png")
 
@@ -62,6 +68,7 @@ try:
 				
 			if(pos[0] != -1):			#If Victory img is found
 				conditional = 1
+				print(conditional)
 			elif(pos2[0] != -1):		#If Fail is found.
 				conditional = 2
 
@@ -69,6 +76,14 @@ try:
 		if(conditional == 1):
 			print("Run successful: " + str(counter))
 			time.sleep(3)
+
+			if(mode == 6 ):
+				click_image("./images/victory-paint.png", pos, "left", 0.2, offset=5)
+				click_image("./images/victory-paint.png", pos, "left", 0.2, offset=5)
+				search("./images/ok.png")	
+				search("./images/next_stage.png")
+				search("./images/start.png")
+
 
 			if(mode == 2):
 				time.sleep(3)
@@ -140,6 +155,7 @@ try:
 
 			counter = counter + 1
 			screenshot_counter = screenshot_counter + 1
+
 		#IF run fails:
 		elif(conditional == 2):
 			print("Run failed.")

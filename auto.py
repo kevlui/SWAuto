@@ -7,17 +7,47 @@ import os
 import random
 import logging 
 
+import cv2
+import numpy as np
 
+
+
+#----- DEBUG METHODS --------
+def quizSearch(image_directory):
+	delay = random.randint(1,2)
+	button = imagesearch(image_directory,0.7)
+	if button[0] != -1:
+		print("FOUND: " + image_directory)
+		return button
+	else:
+		#print( image_directory + "not found.")
+		return -1
+
+def displayTarget(buttons):
+	img = pyautogui.screenshot()
+	img = np.array(img)
+
+	for button in buttons:
+		image = cv2.rectangle(img, button, (button[0]+20,button[1]+20), (0,255,0) , 3)
+
+	cv2.imshow("target_map", image)
+	k = cv2.waitKey(0) # 0==wait forever
+
+#-----------------------------
 
 def search(image_directory):
-	delay = random.randint(4,5)
+	delay = random.randint(2,3)
+	time.sleep(delay)
 	button = imagesearch(image_directory)
+	#now = datetime.now
+	#dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+
 	if button[0] != -1:
-		#print("Delay is: " + str(delay) + " seconds")
+		print(" Found " + image_directory)
 		logging.info("Clicking " +  image_directory)
 		click_image(image_directory, button, "left", 0.2, offset=5)
-		time.sleep(delay)
 	else:
+		print(" Not Found " + image_directory)
 		logging.info(image_directory + " is not found")
 		return -1
 
@@ -245,13 +275,14 @@ def dimensionalRiftBypass():
 		time.sleep(2)
 
 def checkLost(counter):
-	button = imagesearch('./images/auto battle/lost_battle.png')
+	button = imagesearch('./images/auto battle/lose.png')
 	if button[0] != -1:
 		counter = counter + 1
 		print("Lost Battle Detected. Current Fails: " + str(counter))
 		logging.info("Lost Battle Detected. Current Fails: " + str(counter))
 		return counter
 	else:
+		logging.info("Lost Battle not Detected.")
 		return counter
 
 
@@ -261,8 +292,9 @@ def autoBattle(refill_counter,max_counter):
 
 	currentTime = datetime.now()
 	ct_string = currentTime.strftime("%d-%m-%H-%M-%S")
-
 	num_lost = 0
+
+	
 
 	while(auto_battle_active == 1):
 		#check for replay button.
@@ -271,6 +303,7 @@ def autoBattle(refill_counter,max_counter):
 		if(change[0] != -1):
 			num_lost = checkLost(num_lost)
 			search('./images/auto battle/replay.png')
+			search('./images/auto battle/ok.png')
 			search('./images/auto battle/repeat_battle.png')
 			check = search('./images/auto battle/shop.png')
 
@@ -283,7 +316,7 @@ def autoBattle(refill_counter,max_counter):
 					if(quiz_check != -1):
 						pyautogui.screenshot("./screenshots/quiz data/" + ct_string + ".png")
 						logging.info("Quiz Detected.")
-						sys.ext()
+						quizSolver()
 
 					search('./images/auto battle/yes.png')
 					search('./images/auto battle/ok.png')
@@ -295,6 +328,13 @@ def autoBattle(refill_counter,max_counter):
 				auto_battle_active = 2
 				print("Desired Refill has been reached. Program Ended.")
 				sys.ext()
+def toa():
+	search("./images/victory-paint.png")
+	search("./images/victory-paint.png")
+	search("./images/ok.png")	
+	search("./images/next_stage.png")
+	search("./images/start.png")
+
 
 def quizSolver():
 	search('./images/sw_tab.png')
