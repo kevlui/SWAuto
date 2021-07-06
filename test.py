@@ -4,7 +4,6 @@ import cv2 as cv
 import random
 from auto import *
 from imagesearch import *
-from quizsolver import *
 import logging 
 import argparse
 
