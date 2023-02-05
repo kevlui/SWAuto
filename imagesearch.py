@@ -21,7 +21,6 @@ output : a PIL image of the area selected.
 
 '''
 
-
 def region_grabber(region):
     if is_retina: region = [n * 2 for n in region]
     x1 = region[0]
@@ -33,7 +32,6 @@ def region_grabber(region):
     im.save("region_screenshot.png")
 
     return pyautogui.screenshot(region=(x1, y1, width, height))
-
 
 '''
 
@@ -94,7 +92,7 @@ def click_image(image, pos, action, timestamp, offset=5):
     img = cv2.imread(image)
     height, width, channels = img.shape
     pyautogui.moveTo(pos[0] + r(width / 2, offset), pos[1] + r(height / 2, offset),
-                     timestamp)
+                     timestamp, pyautogui.easeInQuad)
     pyautogui.click(button=action)
 
 
