@@ -17,17 +17,21 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r'.\hello tess\tesseract.exe'
 
 #
-def findText():
-    pyautogui.screenshot("./text_read.png")
-    img = cv2.imread("./text_read.png")
+def findText(imgPath):
+    #pyautogui.screenshot("./text_read.png")
+    img = cv2.imread(imgPath)
 
-    data = pytesseract.image_to_data(img, output_type='dict')
-    boxes = len(data['level'])
-    for i in range(boxes ):
-        (x, y, w, h) = (data['left'][i], data['top'][i], data['width'][i], data['height'][i])
-        print(str(x) + str(y) + str(w) + str(h))
-        #Draw box        
-        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    #data = pytesseract.image_to_data(img, output_type='dict')
+    data = pytesseract.image_to_string(imgPath)
+    #print(data)
+    return data
+    
+    # boxes = len(data['level'])
+    # for i in range(boxes ):
+    #     (x, y, w, h) = (data['left'][i], data['top'][i], data['width'][i], data['height'][i])
+    #     #print(str(x) + str(y) + str(w) + str(h))
+    #     #Draw box        
+    #     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
 
 #----- DRAWING RELATED METHODS-----
@@ -216,12 +220,17 @@ def searchFix(image_directory, next_image_directory, check_image, modifiedDelay=
                         print("Stalling Detected: Cannot find " + next_image_directory)
                         print('Current CheckImage Num: ' + str(checkImageNum))
                         checkImageNum = checkImageNum + 1
+                        pyautogui.moveTo(385,783, 2, pyautogui.easeInQuad)
+                        pyautogui.click()
                         time.sleep(2)
+
                     #If image is intended to be not found BUT found:
                     elif (check_image == False) and (checkLag[0] != -1):
                         print("Stalling Detected: Following image detected " + next_image_directory )
                         print('Current CheckImage Num: ' + str(checkImageNum))
                         checkImageNum = checkImageNum + 1
+                        pyautogui.moveTo(385,783, 2, pyautogui.easeInQuad)
+                        pyautogui.click()
                         time.sleep(2)
                     else:
                         print("Stalling Ended.")
@@ -365,7 +374,8 @@ def autoBattle(refill_counter,max_counter):
                     if(quiz_check != -1):
                         logging.info("Quiz Detected.")
                         print("Quiz Detected.")
-                        pyautogui.screenshot("quiz.png")
+                        date = datetime.today()
+                        pyautogui.screenshot("quiz_" + str(date) + ".png")
                         quizSolver()
                         searchFix('./images/auto battle/ok-quiz-submit.png', './images/auto battle/ok-quiz-correct.png', True)
                         searchFix('./images/auto battle/ok-quiz-correct.png', './images/auto battle/ok-quiz-correct.png', False)
@@ -466,6 +476,10 @@ def quizSolver():
         files = absoluteFilePaths('./Captcha Images/Boss')
     elif(target_info[1] == "Ellia"):
         files = absoluteFilePaths('./Captcha Images/Ellia')
+    elif(target_info[1] == "Rocks"):
+        files = absoluteFilePaths('./Captcha Images/Rocks')
+    elif(target_info[1] == "Trees"):
+        files = absoluteFilePaths('./Captcha Images/Trees')
     else:
         files_boss = absoluteFilePaths('./Captcha Images/Boss')
         files_ellia = absoluteFilePaths('./Captcha Images/Ellia')

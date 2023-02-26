@@ -95,15 +95,15 @@ def replayFix():
 		searchFix("./images/auto battle/replay.png", "./images/auto battle/replay.png", False)
 	else:
 		print('Sell Detected')
+		search("./images/auto battle/sell_all.png")
 		legendSell = imagesearch("./images/auto battle/yes_sell_legend.png")
 		if(legendSell[0] != -1):
 			search("./images/auto battle/yes_sell_legend.png")
-		else:
-			search("./images/auto battle/sell_all.png")
 		searchFix("./images/auto battle/replay.png", "./images/auto battle/replay.png", False)
 
-	time.sleep(3)
-	search("./images/auto battle/repeat_battle.png")
+	#time.sleep(3)
+	#searchFix("./images/auto battle/repeat_battle.png", "./images/auto battle/repeat_battle.png", False)
+	#search("./images/auto battle/repeat_battle.png")
 
 def refill():
 	time.sleep(2)
@@ -144,6 +144,25 @@ def refillFix():
 	searchFix("./images/auto battle/yes_shop_ok.png", "./images/auto battle/close_shop.png", True)
 	searchFix("./images/auto battle/close_shop.png", "./images/auto battle/repeat_battle.png", True )
 	searchFix("./images/auto battle/repeat_battle.png", "./images/auto battle/repeat_battle.png", False)
+
+def refillUI():
+	time.sleep(2)
+	searchFix("./images/auto battle/refill_shop.png", "./images/auto battle/recharge_energy_190.png", True)
+	searchFix("./images/auto battle/recharge_energy_190.png", "./images/auto battle/recharge_energy_190.png", False)
+
+	#Check for Quiz
+	quiz_check = search('./images/auto battle/quiz.png')
+	if(quiz_check != -1):
+		logging.info("Quiz Detected.")
+		print("Quiz Detected.")
+		pyautogui.screenshot("quiz.png")
+		quizSolver()
+		searchFix('./images/auto battle/ok-quiz-submit.png', './images/auto battle/ok-quiz-correct.png', True)
+		searchFix('./images/auto battle/ok-quiz-correct.png', './images/auto battle/ok-quiz-correct.png', False)
+		
+	searchFix("./images/auto battle/yes_shop.png", "./images/auto battle/yes_shop_ok.png", True)
+	searchFix("./images/auto battle/yes_shop_ok.png", "./images/auto battle/close_shop.png", True)
+	searchFix("./images/auto battle/close_shop.png", "./images/auto battle/close_shop.png", False )
 	
 def testAuto():
 	print('Testing...')
@@ -156,30 +175,72 @@ def testAuto():
 
 		while(conditional == -1):
 			pos = imagesearch("./images/auto battle/replay.png")
+			currentEnergy = refillFromScreen()
 			time.sleep(5)
 			if(pos[0] != -1):			#Battle has ended.
 				print("Repeat Battle has ended. Replaying.")
 				replayFix()
 
-				#Check if refill is neccessary.
-				time.sleep(5)
-				refill_pos = imagesearch("./images/auto battle/refill_shop.png")
-				if(refill_pos[0] != -1):
-					print('Refill Required.')
-					refillFix()
-				else:
-					print('No Refill Required.')
-					#searchFix("./images/auto battle/repeat_battle.png", "./images/auto battle/repeat_battle.png", False)
+				print('Initial Repeat Battle.')
+				search("./images/auto battle/repeat_battle.png")
+				checkRefill = 0
 
+				while(checkRefill == 0):
+					repeatBattleCheck = imagesearch("./images/auto battle/repeat_battle.png")
+					if repeatBattleCheck[0] != -1:
+						refill_pos = imagesearch("./images/auto battle/refill_shop.png")
+						repeatBattleCheck = imagesearch("./images/auto battle/repeat_battle.png")
+
+						if(refill_pos[0] != -1):
+							checkRefill = 1
+							print('Refill Required.')
+							refillFix()
+						elif(refill_pos[0]) == 0 and (repeatBattleCheck[0] != 0):
+							print('Re-trying to click repeat battle')
+							search("./images/auto battle/repeat_battle.png")
+						elif(repeatBattleCheck[0] == 0):
+							print('No repeat battle or refill found')	
+							checkRefill = 1
+					else:
+						print('Initial Repeat Battle Successful ... Ending loop.')
+						checkRefill = 1
+					time.sleep(2)
+			if(currentEnergy < 12):
+				print('Refill Required:  ' + str(currentEnergy))
+				searchFix('./images/refill/addEnergy.png', "./images/auto battle/refill_shop.png", True)
+				refillUI()
+
+				
 def test():
 	refill_pos = imagesearch("./images/test.png")
 	print('Checking if icon exists:' + str(refill_pos))
+
+
+def refillFromScreen():
+	energyPos = imagesearch('./images/refill/energy.png')
+	addRefillPos = imagesearch('./images/refill/addEnergy.png')
+
+
+	pyautogui.screenshot('test-refill.png',region=(energyPos[0] + 50, energyPos[1], addRefillPos[0]-energyPos[0] - 40, 50 ))
+	energyMeter = findText('test-refill.png')
+
+	filteredString = ""
+
+	for char in energyMeter:
+		if(char.isdigit() or char == '/'):
+			filteredString = filteredString + char
+			
+	currentEnergy = int(filteredString.split('/')[0])
+	#print('Filtered String: ' + str(currentEnergy))
+	return currentEnergy
+
 	
 	
 
 try:
 	#autoToa()
 	#test()
+	#refillFromScreen()
 	testAuto()
 	#refill_pos = imagesearch("./images/auto battle/refill_shop.png")
 	#print(str(refill_pos))
