@@ -17,6 +17,28 @@ import pytesseract
 pytesseract.pytesseract.tesseract_cmd = r'.\hello tess\tesseract.exe'
 
 #
+
+def findRuneTargets():
+    print('Testing Finding Rune Targets.')
+
+    #Isolate the correct area for rune selection.
+    findColor()
+
+    #Look for purple color locations.
+    #Remove potential 'dupes'
+    #Filter out the rune crafting pieces.
+
+def getRuneText():
+    print('Testing Rune Text')
+    left_corner = imagesearch('./images/rune_cleaner/pencil.png')
+    bottom_corner = imagesearch('./images/rune_cleaner/power_up.png')
+
+    if(left_corner[0] != -1 and bottom_corner[0] != -1):
+        pyautogui.screenshot('test-clean.png',region=(left_corner[0], left_corner[1] + 150 , bottom_corner[0]- left_corner[0] - 40, 150 ))
+        print('Screenshot Taken.')
+        text= findText('test-clean.png')
+        print(text)
+
 def findText(imgPath):
     #pyautogui.screenshot("./text_read.png")
     img = cv2.imread(imgPath)
@@ -32,8 +54,6 @@ def findText(imgPath):
     #     #print(str(x) + str(y) + str(w) + str(h))
     #     #Draw box        
     #     cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-
 #----- DRAWING RELATED METHODS-----
 def sellRunes():
     #Search for the colors.
@@ -73,68 +93,32 @@ def sellRunes():
     print("Runes:", runes)
     return runes
         
-def findColor():
-    pyautogui.screenshot("./rune_selector.png")
-    img = cv2.imread("./rune_selector.png")
+def findColor(img, lower_color, upper_color):
 
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    lower_blue = np.array([90,50,50])
-    upper_blue = np.array([130,255,255])
-
-    mask = cv2.inRange(hsv, lower_blue, upper_blue)
+    mask = cv2.inRange(hsv, lower_color, upper_color)
     res = cv2.bitwise_and(img,img, mask= mask)
-
-
     contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) 
 
     targets = []
     counter = 0
 
-    topLeft = quizSearch("./images/auto battle/rune_top_left.png")
-    botRight = quizSearch("./images/auto battle/sell_selected.png")
-
-    print("topLeft: ", topLeft)
-    print("botRight: ", botRight)
-
-    #Searching for Blue runes.
+    #Searching for Purple runes.
     for pic, contour in enumerate(contours): 
-        area = cv2.contourArea(contour) 
-        
-        if(area > 300): 
-            x, y, w, h = cv2.boundingRect(contour) 
-            coords = [x,y]
+        x, y, w, h = cv2.boundingRect(contour) 
+        coords = [x,y]
 
-            #Filter out the ones not in the area.
-            mana_icon = cv2.imread("./images/auto battle/rune_top_left.png")
-            mana_height, mana_width, mana_channels = mana_icon.shape
-
-            sell_button = cv2.imread("./images/auto battle/sell_selected.png")
-            height, width, channels = sell_button.shape
-
-            #item_area = cv2.imread("./images/auto_battle/dummy_rune.png")
-            #item_height, item_width, item_channels = item_area.shape
-
-
-            range_x = range(topLeft[0], botRight[0] + int(width))
-            range_y = range(topLeft[1] + int(mana_height), botRight[1])
-
-            if( (x in range_x) and (y in range_y)):
-                #Filter out any blues within the same item area.
-                if(containsDupe(coords, targets, 80 ) == False):
-                    img = cv2.rectangle(img, (x, y), 
-                                        (x + w, y + h), 
-                                        (255, 0, 0), 2) 
-                    cv2.putText(img, str(counter), (x, y), 
-                                    cv2.FONT_HERSHEY_SIMPLEX, 
-                                    1.0, (255, 255, 255)) 
-                    targets.append(coords)
-
-            
+        #Each slot is around 150 x 150, so for each centerpoint of the slot, check if there's a hit on it.
+        if(containsDupe(coords, targets, 80 ) == False):
+            img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2) 
+            cv2.putText(img, str(counter), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255)) 
+            targets.append(coords)
             #print(counter, coords)
             counter = counter + 1
 
     #print("Targets: ", targets)
-    cv2.imwrite('ztest.jpg', img)
+    #cv2.imwrite('find-color-targets.jpg', img)
+    print('Counters: ', counter)
     return targets
     #cv2.imwrite('frame.jpg', img)
     #cv2.imwrite('zmask.jpg',mask)
@@ -167,7 +151,6 @@ def displayTarget(buttons,name):
 
 #-----------HELPER METHODS-------------
 
-
 def search(image_directory):
     delay = random.randint(2,3)
     time.sleep(delay)
@@ -191,7 +174,7 @@ def searchFix(image_directory, next_image_directory, check_image, modifiedDelay=
     failCounter = 0
 
     while(failCounter < 10):
-        delay = random.randint(4,5)
+        delay = random.randint(2,3)
         button = imagesearch(image_directory)
 
         if (button[0] != -1):
@@ -508,7 +491,7 @@ def quizSolver():
             time.sleep(2)
 
 
-        displayTarget(monsters,"./quiz_solver/quiz_mons" + ct_string + ".jpg")
+        displayTarget(monsters,"./screenshots/quiz_solver/quiz_mons_" + ct_string + ".jpg")
 
 
     else:
@@ -516,7 +499,7 @@ def quizSolver():
             click_image('./Captcha Images/Boss/dragon.png', button, "left", 0.2, offset=5)
             time.sleep(2)
 
-        displayTarget(buttons, "./quiz_solver/quiz_buttons" + ct_string + ".jpg")
+        displayTarget(buttons, "./screenshots/quiz_solver/quiz_buttons_" + ct_string + ".jpg")
 
 def mapAnswers(margin_x, margin_y):
     mapLocations = []

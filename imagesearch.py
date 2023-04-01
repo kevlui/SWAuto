@@ -245,6 +245,34 @@ def imagesearch_count(image, precision=0.9):
     # cv2.imwrite('result.png', img_rgb) // Uncomment to write output image with boxes drawn around occurances
     return count
 
+def imagesearch_occurances(img_rgb,image, precision=0.9):
+    if is_retina:
+        img_rgb.thumbnail((round(img_rgb.size[0] * 0.5), round(img_rgb.size[1] * 0.5)))
+    img_rgb = np.array(img_rgb)
+    img_gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+    template = cv2.imread(image, 0)
+    w, h = template.shape[::-1]
+    res = cv2.matchTemplate(img_gray, template, cv2.TM_CCOEFF_NORMED)
+    loc = np.where(res >= precision)
+    count = 0
+    
+    targets = []
+    for pt in zip(*loc[::-1]):  # Swap columns and rows
+        #cv2.rectangle(img_rgb, pt, (pt[0] + w, pt[1] + h), (0, 0, 255), 2) # Uncomment to draw boxes around found occurances
+        if containsDupe(pt, targets, 10) == False:
+            targets.append(pt)
+            count = count + 1
+    #cv2.imwrite('check_occurances.png', img_rgb) #Uncomment to write output image with boxes drawn around occurances
+    return targets
+
 
 def r(num, rand):
     return num + rand * random.random()
+
+def containsDupe(target, array, margin):
+    for current in array:
+        range_x = range(current[0]-margin, current[0]+margin)
+        range_y = range(current[1]-margin, current[1]+ margin)
+        if (target[0] in range_x) and (target[1] in range_y):
+            return True
+    return False
